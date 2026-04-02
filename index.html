@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Villa VR</title>
+
+  <script src="Script/aframe-master.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      font-family: Arial, sans-serif;
+    }
+
+    #hint {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.55);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="hint">WASD to move • Mouse to look</div>
+
+  <a-scene renderer="antialias: true; colorManagement: true" shadow="type: pcfsoft">
+
+    <!-- ASSETS -->
+    <a-assets timeout="60000">
+      <a-asset-item id="villa-model" src="Module/nVilla.glb"></a-asset-item>
+      <a-asset-item id="car-model" src="Module/cyberpunk_car.glb"></a-asset-item>
+      <a-asset-item id="lamp-model" src="Module/V_Street_lamp.glb"></a-asset-item>
+      <a-asset-item id="palm-model" src="Module/Palm_tree.glb"></a-asset-item>
+      <a-asset-item id="pine-model" src="Module/Pine_tree.glb"></a-asset-item>
+      <a-asset-item id="dog-model" src="Module/Dog.glb"></a-asset-item>
+
+      <!-- textures -->
+      <img id="sky-texture" src="Textures/Sky.jpeg" />
+      <img id="grass-texture" src="Textures/ngrass.jfif" />
+      <img id="floor-texture" src="Textures/Floor.jfif" />
+    </a-assets>
+
+    <!-- SKY -->
+    <a-sky src="#sky-texture" ></a-sky>
+
+    <!-- LIGHTING -->
+    <a-light type="ambient" color="#c8d2df" intensity="0.55"></a-light>
+    <a-light type="directional" color="#dce8ff" intensity="0.8" position="8 12 6"></a-light>
+
+    <!-- MAIN GROUND -->
+    <a-plane
+      src="#grass-texture"
+      position="0 0 -40"
+      rotation="-90 0 0"
+      width="400"
+      repeat="100 100"
+      height="400"
+      shadow="receive: true">
+    </a-plane>
+
+    <!-- DRIVEWAY -->
+    <a-plane
+      color="#black"
+      position="-13 0.02 -22"
+      rotation="-90 0 0"
+      width="9"
+      height="60"
+      shadow="receive: true">
+    </a-plane>
+
+    <!-- MAIN WALKWAY -->
+    <a-plane
+      src="#floor-texture"
+      position="0 0.003 -18"
+      rotation="-90 0 0"
+      width="18"
+      height="7"
+      repeat="4 4"
+      shadow="receive: true">
+    </a-plane>
+
+    <!-- POOL BORDER -->
+    <a-box
+      position="41 0 -32"
+      width="6"
+      height="0.36"
+      depth="5"
+      src="Textures/Asky.jpg"
+      material="transparent: true; opacity: 0.92; metalness: 0.2; roughness: 0.08"
+      shadow="receive: true">
+    </a-box>
+
+    <!-- POOL WATER -->
+    <a-plane
+      water-animation
+      position="41 0.3 -32"
+      rotation="-90 0 0"
+      width="6.2"
+      height="4.2"
+      src="Textures/Asky.jpg"
+      material="color: #169cff; transparent: true; opacity: 0.92; metalness: 0.2; roughness: 0.08">
+    </a-plane>
+
+    <!-- POOL LIGHT -->
+    <a-light type="point" color="#22a7ff" intensity="2.1" distance="18" position="41 0.5 -32"></a-light>
+
+    <!-- VILLA -->
+    <a-entity
+      gltf-model="#villa-model"
+      position="-12 0.1 -2"
+      scale="1.25 1.25 1.25"
+      rotation=" 0 -90 0"
+      shadow="cast: true; receive: true">
+    </a-entity>
+    
+    <!-- CAR -->
+    <a-entity
+      gltf-model="#car-model"
+      position="15 0 -15"
+      rotation="0 0 0"
+      scale="0.011 0.013 0.01"
+      shadow="cast: true; receive: true">
+    </a-entity>
+
+    <!--LEFT LAMPS -->
+    <a-entity position="-18 0 -10">
+      <a-entity gltf-model="#lamp-model" rotation="0 -180 0" scale="0.85 0.85 0.85"></a-entity>
+    </a-entity>
+    <a-entity position="-18 0 -6">
+      <a-entity gltf-model="#lamp-model" rotation="0 -180 0" scale="0.8 0.8 0.8"></a-entity>
+    </a-entity>
+    <a-entity position="-18 0 -2">
+      <a-entity gltf-model="#lamp-model" rotation="0 -180 0" scale="0.8 0.8 0.8"></a-entity>
+    </a-entity>
+    <a-entity position="-18 0 0">
+      <a-entity gltf-model="#lamp-model" rotation="0 -180 0" scale="0.8 0.8 0.8"></a-entity>
+    </a-entity>
+
+    <!-- RIGHT LAMPS -->
+    <a-entity position="-8 0 -10">
+      <a-entity gltf-model="#lamp-model" position="" scale="0.85 0.85 0.85"></a-entity>
+    </a-entity>
+    <a-entity position="-8 0 -6">
+      <a-entity gltf-model="#lamp-model" scale="0.8 0.8 0.8"></a-entity>
+    </a-entity>
+    
+
+    <!-- PALM TREES -->
+    <a-entity gltf-model="#palm-model" position="-15 0 -15" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-5 0 -15" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-15 0 -8" scale="1.25 1.25 1.25"></a-entity> 
+    <a-entity gltf-model="#palm-model" position="-5 0 -8" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-15 0 -8" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-5 0 -8" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-15 0 -24" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-5 0 -24" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-15 0 -3" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-5 0 -42" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-15 0 -35" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-5 0 -30" scale="1.25 1.25 1.25"></a-entity>
+    <a-entity gltf-model="#palm-model" position="-15 0 -30" scale="1.25 1.25 1.25"></a-entity>
+
+    <!-- PINE TREES -->
+    <a-entity>
+      <!-- BACK SIDE -->
+      <a-entity gltf-model="#pine-model" position="12 0 -55" scale="1.6 1.6 1.6"></a-entity>
+      <a-entity gltf-model="#pine-model" position="25 0 -55" scale="1.6 1.6 1.6"></a-entity>
+      <a-entity gltf-model="#pine-model" position="2 0 -60" scale="1.6 1.6 1.6"></a-entity>
+      <a-entity gltf-model="#pine-model" position="20 0 -60" scale="1.6 1.6 1.6"></a-entity>
+      <a-entity gltf-model="#pine-model" position="35 0 4" scale="0.5 0.5 0.5"></a-entity>
+      <a-entity gltf-model="#pine-model" position="15 0 4" scale="0.5 0.5 0.5"></a-entity>
+      <a-entity gltf-model="#pine-model" position="35 0 8" scale="0.5 0.5 0.5"></a-entity>
+      <a-entity gltf-model="#pine-model" position="15 0 8" scale="0.5 0.5 0.5"></a-entity>
+      <a-entity gltf-model="#pine-model" position="35 0 12" scale="0.5 0.5 0.5"></a-entity>
+      <a-entity gltf-model="#pine-model" position="15 0 12" scale="0.5 0.5 0.5"></a-entity>
+      <!-- FRONT SIDE -->
+       <a-entity gltf-model="#pine-model" position="0 0 8" scale="0.5 0.5 0.5"></a-entity>
+       <a-entity gltf-model="#pine-model" position="0 0 12" scale="0.5 0.5 0.5"></a-entity>
+    </a-entity>
+
+
+    <!-- DOG -->
+    <a-entity
+      position="15 1 -5"
+      scale="1.5 1.5 1.5">
+      <a-entity gltf-model="#dog-model" scale="0.34 0.34 0.34" rotation="0 0 0"></a-entity>
+    </a-entity>
+
+    <!-- CAMERA -->
+    <a-entity id="rig" position="18 1.6 20" scene-limit>
+      <a-camera wasd-controls="acceleration: 30" look-controls>
+        <a-cursor color="#ffffff" fuse="false"></a-cursor>
+      </a-camera>
+    </a-entity>
+
+  </a-scene>
+
+  <script>
+    AFRAME.registerComponent('water-animation', {
+      tick: function (time) {
+        const wave = Math.sin(time / 450) * 0.05;
+        this.el.object3D.position.y = 0.06 + wave;
+      }
+    });
+
+    AFRAME.registerComponent('scene-limit', {
+      tick: function () {
+        const pos = this.el.object3D.position;
+        if (pos.x < -45) pos.x = -45;
+        if (pos.x > 45) pos.x = 45;
+        if (pos.z > 18) pos.z = 18;
+        if (pos.z < -60) pos.z = -60;
+      }
+    });
+  </script>
+</body>
+</html>
