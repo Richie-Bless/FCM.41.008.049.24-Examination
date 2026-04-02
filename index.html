@@ -35,12 +35,12 @@
 
     <!-- ASSETS -->
     <a-assets timeout="60000">
-      <a-asset-item id="villa-model" src="Module/nVilla.glb"></a-asset-item>
-      <a-asset-item id="car-model" src="Module/cyberpunk_car.glb"></a-asset-item>
+      <a-asset-item id="villa-model" src="Module/optimised_Villa-v1.glb"></a-asset-item>
+      <a-asset-item id="car-model" src="Module/n-cyberpunk_car-v1.glb"></a-asset-item>
       <a-asset-item id="lamp-model" src="Module/V_Street_lamp.glb"></a-asset-item>
-      <a-asset-item id="palm-model" src="Module/Palm_tree.glb"></a-asset-item>
+      <a-asset-item id="palm-model" src="Module/Palm_tree-v1.glb"></a-asset-item>
       <a-asset-item id="pine-model" src="Module/Pine_tree.glb"></a-asset-item>
-      <a-asset-item id="dog-model" src="Module/Dog.glb"></a-asset-item>
+      <a-asset-item id="dog-model" src="Module/oDog-v2.glb"></a-asset-item>
 
       <!-- textures -->
       <img id="sky-texture" src="Textures/Sky.jpeg" />
@@ -89,28 +89,51 @@
 
     <!-- POOL BORDER -->
     <a-box
-      position="41 0 -32"
-      width="6"
-      height="0.36"
-      depth="5"
-      src="Textures/Asky.jpg"
-      material="transparent: true; opacity: 0.92; metalness: 0.2; roughness: 0.08"
+      position="41 0.15 -32"
+      width="6.6"
+      height="0.3"
+      depth="5.6"
+      src="Textures/Sky.jpeg"
       shadow="receive: true">
     </a-box>
 
-    <!-- POOL WATER -->
+  <!-- DARK POOL BASE -->
+    <a-box
+      position="41 -0.18 -32"
+      width="5.9"
+      height="0.4"
+      depth="4.9">
+    </a-box>
+
+    <!-- MAIN WATER SURFACE -->
     <a-plane
+      id="pool-water"
       water-animation
-      position="41 0.3 -32"
+      position="41 0.19 -32"
       rotation="-90 0 0"
-      width="6.2"
-      height="4.2"
-      src="Textures/Asky.jpg"
-      material="color: #169cff; transparent: true; opacity: 0.92; metalness: 0.2; roughness: 0.08">
+      width="5.95"
+      height="4.95"
+      material="transparent: true; opacity: 0.72; metalness: 0.55; roughness: 0.08">
     </a-plane>
 
-    <!-- POOL LIGHT -->
-    <a-light type="point" color="#22a7ff" intensity="2.1" distance="18" position="41 0.5 -32"></a-light>
+    <!-- REFLECTION SHEEN LAYER -->
+    <a-plane
+      id="pool-reflection"
+      position="41 0.205 -32"
+      rotation="-90 0 0"
+      width="5.7"
+      height="4.7"
+      material="transparent: true; opacity: 0.08; metalness: 1; roughness: 0.02">
+    </a-plane>
+
+    <!-- POOL GLOW -->
+    <a-light
+      type="point"
+      color="#4fc3ff"
+      intensity="1.6"
+      distance="14"
+      position="41 1.2 -32">
+    </a-light>
 
     <!-- VILLA -->
     <a-entity
@@ -204,22 +227,38 @@
   </a-scene>
 
   <script>
-    AFRAME.registerComponent('water-animation', {
-      tick: function (time) {
-        const wave = Math.sin(time / 450) * 0.05;
-        this.el.object3D.position.y = 0.06 + wave;
-      }
-    });
+  AFRAME.registerComponent('water-animation', {
+    tick: function (time) {
+      const t = time / 1000;
 
-    AFRAME.registerComponent('scene-limit', {
-      tick: function () {
-        const pos = this.el.object3D.position;
-        if (pos.x < -45) pos.x = -45;
-        if (pos.x > 45) pos.x = 45;
-        if (pos.z > 18) pos.z = 18;
-        if (pos.z < -60) pos.z = -60;
+      const water = this.el;
+      const reflection = document.querySelector('#pool-reflection');
+
+      water.object3D.position.y = 0.19 + Math.sin(t * 2.2) * 0.012;
+
+      water.object3D.rotation.z = Math.sin(t * 1.4) * 0.01;
+      water.object3D.rotation.x = (-Math.PI / 2) + Math.cos(t * 1.8) * 0.01;
+
+      if (reflection) {
+        reflection.object3D.position.y = 0.205 + Math.cos(t * 2.0) * 0.006;
+        reflection.object3D.rotation.z = Math.cos(t * 1.2) * 0.008;
+        reflection.object3D.rotation.x = (-Math.PI / 2) + Math.sin(t * 1.5) * 0.008;
+
+        const opacity = 0.06 + ((Math.sin(t * 2.5) + 1) / 2) * 0.04;
+        reflection.setAttribute('material', 'opacity', opacity);
       }
-    });
-  </script>
+    }
+  });
+
+  AFRAME.registerComponent('scene-limit', {
+    tick: function () {
+      const pos = this.el.object3D.position;
+      if (pos.x < -45) pos.x = -45;
+      if (pos.x > 45) pos.x = 45;
+      if (pos.z > 18) pos.z = 18;
+      if (pos.z < -60) pos.z = -60;
+    }
+  });
+</script>
 </body>
 </html>
