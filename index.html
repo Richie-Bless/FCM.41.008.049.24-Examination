@@ -26,12 +26,94 @@
       border-radius: 8px;
       font-size: 14px;
     }
+
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        linear-gradient(rgba(4, 12, 24, 0.88), rgba(4, 12, 24, 0.92)),
+        url("Textures/Sky.jpeg") center center / cover no-repeat;
+      color: #ffffff;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #loading-screen.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loading-card {
+      width: min(420px, 90vw);
+      padding: 28px 24px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      text-align: center;
+    }
+
+    .loading-title {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .loading-subtitle {
+      font-size: 15px;
+      color: #d9e7f5;
+      margin-bottom: 18px;
+    }
+
+    .loading-bar {
+      width: 100%;
+      height: 10px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0 auto 12px;
+    }
+
+    .loading-progress {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #4fc3ff, #9de1ff);
+      transition: width 0.25s ease;
+    }
+
+    .loading-text {
+      font-size: 13px;
+      color: #e8f4ff;
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
+  <div id="loading-screen">
+    <div class="loading-card">
+      <div class="loading-title">Dream Villa VR</div>
+      <div class="loading-subtitle">Preparing your luxury experience...</div>
+
+      <div class="loading-bar">
+        <div id="loading-progress" class="loading-progress"></div>
+      </div>
+
+      <div id="loading-text" class="loading-text">Loading assets... 0%</div>
+    </div>
+  </div>
+
   <div id="hint">WASD to move • Mouse to look</div>
 
-  <a-scene renderer="antialias: true; colorManagement: true" shadow="type: pcfsoft">
+  <a-scene
+    renderer="antialias: true; colorManagement: true"
+    shadow="type: pcfsoft"
+    loading-screen="enabled: false">
 
     <!-- ASSETS -->
     <a-assets timeout="60000">
@@ -42,14 +124,13 @@
       <a-asset-item id="pine-model" src="Module/Pine_tree.glb"></a-asset-item>
       <a-asset-item id="dog-model" src="Module/oDog-v2.glb"></a-asset-item>
 
-      <!-- textures -->
       <img id="sky-texture" src="Textures/Sky.jpeg" />
       <img id="grass-texture" src="Textures/ngrass.jfif" />
       <img id="floor-texture" src="Textures/Floor.jfif" />
     </a-assets>
 
     <!-- SKY -->
-    <a-sky src="#sky-texture" ></a-sky>
+    <a-sky src="#sky-texture"></a-sky>
 
     <!-- LIGHTING -->
     <a-light type="ambient" color="#c8d2df" intensity="0.55"></a-light>
@@ -61,20 +142,45 @@
       position="0 0 -40"
       rotation="-90 0 0"
       width="400"
-      repeat="100 100"
       height="400"
+      repeat="100 100"
       shadow="receive: true">
     </a-plane>
 
-    <!-- DRIVEWAY -->
+    <!-- DRIVEWAY ASPHALT -->
     <a-plane
-      color="#black"
       position="-13 0.02 -22"
       rotation="-90 0 0"
       width="9"
-      height="60"
+      height="90"
+      color="#1e1e1e"
+      material="roughness: 0.95; metalness: 0.05"
       shadow="receive: true">
     </a-plane>
+
+    <!-- DRIVEWAY EDGE STRIPS -->
+    <a-plane
+      position="-17.3 0.021 -22"
+      rotation="-90 0 0"
+      width="0.18"
+      height="90"
+      color="#b9b9b9">
+    </a-plane>
+
+    <a-plane
+      position="-8.7 0.021 -22"
+      rotation="-90 0 0"
+      width="0.18"
+      height="90"
+      color="#b9b9b9">
+    </a-plane>
+
+    <!-- DRIVEWAY CENTER DASHES -->
+    <a-plane position="-13 0.022 -10" rotation="-90 0 0" width="0.16" height="3.2" color="#f4f1d0"></a-plane>
+    <a-plane position="-13 0.022 -18" rotation="-90 0 0" width="0.16" height="3.2" color="#f4f1d0"></a-plane>
+    <a-plane position="-13 0.022 -26" rotation="-90 0 0" width="0.16" height="3.2" color="#f4f1d0"></a-plane>
+    <a-plane position="-13 0.022 -34" rotation="-90 0 0" width="0.16" height="3.2" color="#f4f1d0"></a-plane>
+    <a-plane position="-13 0.022 -42" rotation="-90 0 0" width="0.16" height="3.2" color="#f4f1d0"></a-plane>
 
     <!-- MAIN WALKWAY -->
     <a-plane
@@ -87,63 +193,36 @@
       shadow="receive: true">
     </a-plane>
 
-    <!-- POOL BORDER -->
+      <!-- POOL BORDER -->
     <a-box
       position="41 0.15 -32"
       width="6.6"
       height="0.3"
       depth="5.6"
-      src="Textures/Sky.jpeg"
       shadow="receive: true">
     </a-box>
 
-  <!-- DARK POOL BASE -->
+    <!-- REFLECTIVE POOL SURFACE -->
     <a-box
-      position="41 -0.18 -32"
-      width="5.9"
-      height="0.4"
-      depth="4.9">
-    </a-box>
-
-    <!-- MAIN WATER SURFACE -->
-    <a-plane
       id="pool-water"
       water-animation
-      position="41 0.19 -32"
       rotation="-90 0 0"
-      width="5.95"
-      height="4.95"
-      material="transparent: true; opacity: 0.72; metalness: 0.55; roughness: 0.08">
-    </a-plane>
-
-    <!-- REFLECTION SHEEN LAYER -->
-    <a-plane
-      id="pool-reflection"
-      position="41 0.205 -32"
-      rotation="-90 0 0"
-      width="5.7"
-      height="4.7"
-      material="transparent: true; opacity: 0.08; metalness: 1; roughness: 0.02">
-    </a-plane>
-
-    <!-- POOL GLOW -->
-    <a-light
-      type="point"
-      color="#4fc3ff"
-      intensity="1.6"
-      distance="14"
-      position="41 1.2 -32">
-    </a-light>
+      position="41 -0.1 -32"
+      width="5.2"
+      height="4.9"
+      depth="0.29"
+      src="Textures/Sky.jpeg">
+    </a-box>
 
     <!-- VILLA -->
     <a-entity
       gltf-model="#villa-model"
       position="-12 0.1 -2"
       scale="1.25 1.25 1.25"
-      rotation=" 0 -90 0"
+      rotation="0 -90 0"
       shadow="cast: true; receive: true">
     </a-entity>
-    
+
     <!-- CAR -->
     <a-entity
       gltf-model="#car-model"
@@ -153,7 +232,7 @@
       shadow="cast: true; receive: true">
     </a-entity>
 
-    <!--LEFT LAMPS -->
+    <!-- LEFT LAMPS -->
     <a-entity position="-18 0 -10">
       <a-entity gltf-model="#lamp-model" rotation="0 -180 0" scale="0.85 0.85 0.85"></a-entity>
     </a-entity>
@@ -169,18 +248,15 @@
 
     <!-- RIGHT LAMPS -->
     <a-entity position="-8 0 -10">
-      <a-entity gltf-model="#lamp-model" position="" scale="0.85 0.85 0.85"></a-entity>
+      <a-entity gltf-model="#lamp-model" scale="0.85 0.85 0.85"></a-entity>
     </a-entity>
     <a-entity position="-8 0 -6">
       <a-entity gltf-model="#lamp-model" scale="0.8 0.8 0.8"></a-entity>
     </a-entity>
-    
 
     <!-- PALM TREES -->
     <a-entity gltf-model="#palm-model" position="-15 0 -15" scale="1.25 1.25 1.25"></a-entity>
     <a-entity gltf-model="#palm-model" position="-5 0 -15" scale="1.25 1.25 1.25"></a-entity>
-    <a-entity gltf-model="#palm-model" position="-15 0 -8" scale="1.25 1.25 1.25"></a-entity> 
-    <a-entity gltf-model="#palm-model" position="-5 0 -8" scale="1.25 1.25 1.25"></a-entity>
     <a-entity gltf-model="#palm-model" position="-15 0 -8" scale="1.25 1.25 1.25"></a-entity>
     <a-entity gltf-model="#palm-model" position="-5 0 -8" scale="1.25 1.25 1.25"></a-entity>
     <a-entity gltf-model="#palm-model" position="-15 0 -24" scale="1.25 1.25 1.25"></a-entity>
@@ -193,7 +269,6 @@
 
     <!-- PINE TREES -->
     <a-entity>
-      <!-- BACK SIDE -->
       <a-entity gltf-model="#pine-model" position="12 0 -55" scale="1.6 1.6 1.6"></a-entity>
       <a-entity gltf-model="#pine-model" position="25 0 -55" scale="1.6 1.6 1.6"></a-entity>
       <a-entity gltf-model="#pine-model" position="2 0 -60" scale="1.6 1.6 1.6"></a-entity>
@@ -204,16 +279,12 @@
       <a-entity gltf-model="#pine-model" position="15 0 8" scale="0.5 0.5 0.5"></a-entity>
       <a-entity gltf-model="#pine-model" position="35 0 12" scale="0.5 0.5 0.5"></a-entity>
       <a-entity gltf-model="#pine-model" position="15 0 12" scale="0.5 0.5 0.5"></a-entity>
-      <!-- FRONT SIDE -->
-       <a-entity gltf-model="#pine-model" position="0 0 8" scale="0.5 0.5 0.5"></a-entity>
-       <a-entity gltf-model="#pine-model" position="0 0 12" scale="0.5 0.5 0.5"></a-entity>
+      <a-entity gltf-model="#pine-model" position="0 0 8" scale="0.5 0.5 0.5"></a-entity>
+      <a-entity gltf-model="#pine-model" position="0 0 12" scale="0.5 0.5 0.5"></a-entity>
     </a-entity>
 
-
     <!-- DOG -->
-    <a-entity
-      position="15 1 -5"
-      scale="1.5 1.5 1.5">
+    <a-entity position="15 1 -5" scale="1.5 1.5 1.5">
       <a-entity gltf-model="#dog-model" scale="0.34 0.34 0.34" rotation="0 0 0"></a-entity>
     </a-entity>
 
@@ -227,38 +298,72 @@
   </a-scene>
 
   <script>
-  AFRAME.registerComponent('water-animation', {
-    tick: function (time) {
-      const t = time / 1000;
+    AFRAME.registerComponent('water-animation', {
+      tick: function (time) {
+        const t = time / 1000;
 
-      const water = this.el;
-      const reflection = document.querySelector('#pool-reflection');
+        const water = this.el;
+        const reflection = document.querySelector('#pool-reflection');
 
-      water.object3D.position.y = 0.19 + Math.sin(t * 2.2) * 0.012;
+        water.object3D.position.y = 0.19 + Math.sin(t * 2.2) * 0.012;
+        water.object3D.rotation.z = Math.sin(t * 1.4) * 0.01;
+        water.object3D.rotation.x = (-Math.PI / 2) + Math.cos(t * 1.8) * 0.01;
 
-      water.object3D.rotation.z = Math.sin(t * 1.4) * 0.01;
-      water.object3D.rotation.x = (-Math.PI / 2) + Math.cos(t * 1.8) * 0.01;
+        if (reflection) {
+          reflection.object3D.position.y = 0.205 + Math.cos(t * 2.0) * 0.006;
+          reflection.object3D.rotation.z = Math.cos(t * 1.2) * 0.008;
+          reflection.object3D.rotation.x = (-Math.PI / 2) + Math.sin(t * 1.5) * 0.008;
 
-      if (reflection) {
-        reflection.object3D.position.y = 0.205 + Math.cos(t * 2.0) * 0.006;
-        reflection.object3D.rotation.z = Math.cos(t * 1.2) * 0.008;
-        reflection.object3D.rotation.x = (-Math.PI / 2) + Math.sin(t * 1.5) * 0.008;
-
-        const opacity = 0.06 + ((Math.sin(t * 2.5) + 1) / 2) * 0.04;
-        reflection.setAttribute('material', 'opacity', opacity);
+          const opacity = 0.06 + ((Math.sin(t * 2.5) + 1) / 2) * 0.04;
+          reflection.setAttribute('material', 'opacity', opacity);
+        }
       }
-    }
-  });
+    });
 
-  AFRAME.registerComponent('scene-limit', {
-    tick: function () {
-      const pos = this.el.object3D.position;
-      if (pos.x < -45) pos.x = -45;
-      if (pos.x > 45) pos.x = 45;
-      if (pos.z > 18) pos.z = 18;
-      if (pos.z < -60) pos.z = -60;
+    AFRAME.registerComponent('scene-limit', {
+      tick: function () {
+        const pos = this.el.object3D.position;
+        if (pos.x < -45) pos.x = -45;
+        if (pos.x > 45) pos.x = 45;
+        if (pos.z > 18) pos.z = 18;
+        if (pos.z < -60) pos.z = -60;
+      }
+    });
+
+    const scene = document.querySelector('a-scene');
+    const assets = document.querySelector('a-assets');
+    const loadingScreen = document.getElementById('loading-screen');
+    const loadingProgress = document.getElementById('loading-progress');
+    const loadingText = document.getElementById('loading-text');
+
+    function updateProgress(value) {
+      const percent = Math.max(0, Math.min(100, Math.round(value)));
+      loadingProgress.style.width = percent + '%';
+      loadingText.textContent = 'Loading assets... ' + percent + '%';
     }
-  });
-</script>
+
+    if (assets) {
+      const assetChildren = assets.querySelectorAll('a-asset-item, img, audio, video');
+      const totalAssets = assetChildren.length || 1;
+      let loadedAssets = 0;
+
+      assetChildren.forEach((asset) => {
+        const done = () => {
+          loadedAssets++;
+          updateProgress((loadedAssets / totalAssets) * 100);
+        };
+
+        asset.addEventListener('loaded', done, { once: true });
+        asset.addEventListener('error', done, { once: true });
+      });
+    }
+
+    scene.addEventListener('loaded', () => {
+      updateProgress(100);
+      setTimeout(() => {
+        loadingScreen.classList.add('hide');
+      }, 500);
+    });
+  </script>
 </body>
 </html>
